@@ -1,0 +1,25 @@
+{
+    "name": "clueapps/registration_module",
+    "type": "library",
+    "require": {
+        "laravel/passport": "^6.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mohamed Ashraf",
+            "email": "mashraf@clueapps.net"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Clueapp\\UserPackage\\RegistrationModuleServiceProvider"
+            ],
+            "aliases": {
+
+            }
+        }
+    },
+    "minimum-stability": "stable"
+}
