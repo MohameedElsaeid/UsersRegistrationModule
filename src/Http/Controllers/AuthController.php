@@ -251,9 +251,8 @@ class AuthController extends Controller
             $response['isSuccess'] = false;
             $response['message']   = "Code not correct";
             return response()->json($response,200);
-            
         }
-        
+    
         $userId = $checkUser->id;
         
         $user = User::where([['id',$userId]]);
