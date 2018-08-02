@@ -422,6 +422,17 @@ function validation($request, $rule, $message = [])
             $errorR[$key] = $error[0];
             $message = $error[0];
         }
-        return MyResponse(0,null,'test', 400);
+        return myResponse(0,null,'',$message ,400);
+    }
+}
+
+function tryCatch($try){
+    try {
+        $tryThis = $try;
+        if(!$tryThis) {
+            throw new Exception();
+        }
+    } catch (Exception $errors) {
+        return $errors;
     }
 }

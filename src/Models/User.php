@@ -9,10 +9,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable ,SoftDeletes;
-    
-    
-    
+    use HasApiTokens, Notifiable, SoftDeletes;
+
+
     /**
      * Get existing or make new access token
      */
@@ -20,8 +19,7 @@ class User extends Authenticatable
     {
         return $this->createToken('user')->accessToken;
     }
-    
-    
+
 
     /**
      * The attributes that are mass assignable.
@@ -38,33 +36,54 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-    
-    public function createValidation(){
+
+    public function createValidation()
+    {
         return [
-            'first_name'              => 'required|string|min:3|max:20',
-            'last_name'              => 'required|string|min:3|max:20',
-            'country_code'      => 'required|string|max:191',
-            'mobile'            => 'required|numeric|unique:users,mobile',
-            'password'          => 'required|string|regex:/^\S*$/u|min:8',
+            'first_name' => 'required|string|min:3|max:20',
+            'last_name' => 'required|string|min:3|max:20',
+            'country_code' => 'required|string|max:191',
+            'mobile' => 'required|numeric|unique:users,mobile',
+            'email' => 'required|numeric|unique:users,email',
+            'password' => 'required|string|regex:/^\S*$/u|min:8',
         ];
     }
-    
-    public function updateValidation(){
+
+    public function updateValidation()
+    {
         return [
-            'first_name'              => 'required|string|min:3|max:20',
-            'last_name'              => 'required|string|min:3|max:20',
-            'country_code'      => 'required|string|max:191',
-            'mobile'            => 'required|numeric',
-            'password'          => 'required|string|regex:/^\S*$/u|min:8',
+            'first_name' => 'required|string|min:3|max:20',
+            'last_name' => 'required|string|min:3|max:20',
+            'country_code' => 'required|string|max:191',
+            'mobile' => 'required|numeric',
+            'email' => 'required|email',
+            'password' => 'required|string|regex:/^\S*$/u|min:8',
         ];
     }
-    
-    public function setPasswordAttribute($value){
+
+    public function setPasswordAttribute($value)
+    {
         $this->attributes['password'] = bcrypt($value);
     }
 
-    public function devices(){
+    public function devices()
+    {
         return $this->hasMany(Device::class);
+    }
+
+    public function socialAccount()
+    {
+        return $this->hasMany(SocialAccount::class);
+    }
+
+    public function verificationCode()
+    {
+        return $this->hasOne(VerificationCode::class);
+    }
+
+    public function forgetPasswordCode()
+    {
+        return $this->hasOne(ForgotPasswordCode::class);
     }
 
 }
