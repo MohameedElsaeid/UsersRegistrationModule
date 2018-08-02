@@ -12,90 +12,59 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+    public function __construct()
+    {
+        $this->model = new User();
+    }
+    
     /**
-     * Display a listing of the resource.
+     * Sign Up new User
      *
      * @return \Illuminate\Http\Response
      */
-    public function signUp(Request $request,User $user)
+    public function signUp(Request $request)
     {
-        validation($request->all(),$user->createValidation());
+        validation($request->all(), $this->model->createValidation());
         $createUser = $this->createNewUser($request->all());
-        $token      = $user->makeApiToken();
-        
-        $data['user']   = $createUser;
-        $data['token']  = $token;
-        myResponse(1,$data);
-        
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function creatse()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $token = $this->model->makeApiToken();
+        $data['user'] = $createUser;
+        $data['token'] = $token;
+        return myResponse(1, $data, messageEn()[0], null);
     }
     
+    /**
+     * User Login
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function login(Request $request)
+    {
+        $credentials = $request->only(['email', 'password']);
+        if (!Auth::attempt($credentials)) {
+            return myResponse(0, null, messageEn()[8], messageEn()[8], 401);
+        }
+        $user = User::where('email', '=', $request->email)->first();
+        $token = $this->model->makeApiToken();
+        $data['user'] = $user;
+        $data['token'] = $token;
+        return myResponse(1, $data, messageEn()[0], null);
+    }
     
+    public function changePassword(Request $request)
+    {
+        validation($request->all(), [
+            'password' => 'required',
+            'new_password' => 'required|string|regex:/^\S*$/u|min:8',
+        ]);
+        $user = Auth()->user();
+        if (Hash::check($request->password, $user->password)) {
+            $user->password = $request->new_password;
+            $user->save();
+            return myResponse(1, null, messageEn()[1], 200);
+        } else {
+            return myResponse(0, null, messageEn()[10], 401);
+        }
+    }
     //----------------------START LOG OUT
     public function logout(Request $request , Device $devices)
     {
