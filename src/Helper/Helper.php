@@ -373,12 +373,12 @@ function createLog($action, $model, $adminId, $itemId)
     Log::create($data);
 }
 
-function MyResponse($Status, $Data = null, $Massage, $ResponseStatus = 200)
+function myResponse($Status, $Data = null, $Massage,$errors = [], $ResponseStatus = 200)
 {
     if ($Data !== null) {
         return response()->json(['status' => $Status, 'data' => $Data, 'message' => $Massage], $ResponseStatus);
     }
-    return response()->json(['status' => $Status, 'data' => (object)[], 'message' => $Massage], $ResponseStatus);
+    return response()->json(['status' => $Status, 'data' => (object)[], 'message' => $Massage , 'errors' => $errors], $ResponseStatus);
 }
 
 
@@ -411,4 +411,17 @@ function PrivacyGroups()
         6 => 'Busy',
         7 => 'WeekendMode',
     ];
+}
+
+function validation($request, $rule, $message = [])
+{
+    $validator = Validator::make($request, $rule, $message);
+    if ($validator->fails()) {
+        $errors = $validator->messages()->toArray();
+        foreach ($errors as $key => $error) {
+            $errorR[$key] = $error[0];
+            $message = $error[0];
+        }
+        return MyResponse(0,null,'test', 400);
+    }
 }

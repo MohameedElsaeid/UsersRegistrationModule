@@ -10,6 +10,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable ,SoftDeletes;
+    
+    
+    
+    /**
+     * Get existing or make new access token
+     */
+    public function makeApiToken()
+    {
+        return $this->createToken('user')->accessToken;
+    }
+    
+    
 
     /**
      * The attributes that are mass assignable.
@@ -26,7 +38,27 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
+    
+    public function createValidation(){
+        return [
+            'first_name'              => 'required|string|min:3|max:20',
+            'last_name'              => 'required|string|min:3|max:20',
+            'country_code'      => 'required|string|max:191',
+            'mobile'            => 'required|numeric|unique:users,mobile',
+            'password'          => 'required|string|regex:/^\S*$/u|min:8',
+        ];
+    }
+    
+    public function updateValidation(){
+        return [
+            'first_name'              => 'required|string|min:3|max:20',
+            'last_name'              => 'required|string|min:3|max:20',
+            'country_code'      => 'required|string|max:191',
+            'mobile'            => 'required|numeric',
+            'password'          => 'required|string|regex:/^\S*$/u|min:8',
+        ];
+    }
+    
     public function setPasswordAttribute($value){
         $this->attributes['password'] = bcrypt($value);
     }

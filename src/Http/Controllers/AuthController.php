@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -11,9 +13,16 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function signUp(Request $request,User $user)
     {
-        //
+        validation($request->all(),$user->createValidation());
+        $createUser = $this->createNewUser($request->all());
+        $token      = $user->makeApiToken();
+        
+        $data['user']   = $createUser;
+        $data['token']  = $token;
+        myResponse(1,$data);
+        
     }
 
     /**
@@ -21,7 +30,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function creatse()
     {
         //
     }
@@ -80,5 +89,10 @@ class AuthController extends Controller
     public function destroy($id)
     {
         //
+    }
+    
+    protected function createNewUser(array $data)
+    {
+        return User::create($data);
     }
 }
