@@ -31,8 +31,8 @@ function messageEn()
 function messageAr()
 {
     return [
-        0 => 'Successful',
-        1 => 'Email is already verified',
+        1 => 'Successful',
+        0 => 'Email is already verified',
         2 => 'Phone is already Exist',
         3 => 'Invalid verification code',
         4 => 'Invalid Email or Password',
