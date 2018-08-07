@@ -1,6 +1,6 @@
 <?php
 
-namespace Clueapp\UsersRegistrationModule;
+namespace clueapps\UsersRegistrationModule;
 
 use Illuminate\Support\ServiceProvider;
 
