@@ -2,7 +2,7 @@
     "name": "clueapps/registration_module",
     "type": "library",
     "require": {
-        "laravel/passport": "^6.0"
+//        "laravel/passport": "^6.0"
     },
     "license": "MIT",
     "authors": [
