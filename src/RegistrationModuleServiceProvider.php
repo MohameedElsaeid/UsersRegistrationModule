@@ -16,7 +16,6 @@ class RegistrationModuleServiceProvider extends ServiceProvider {
        * This will be your files when copied in their directory
        *
        */
-       
 //        $this->publishes([
 //            __DIR__ . '/config/' => config_path('contact.php')
 //        ]);
