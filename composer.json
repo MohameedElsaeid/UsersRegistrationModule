@@ -14,7 +14,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "clueapps\\UsersRegistrationModule\\RegistrationModuleServiceProvider"
+                "clueapps\\registration_module\\RegistrationModuleServiceProvider"
             ],
             "aliases": {
 
